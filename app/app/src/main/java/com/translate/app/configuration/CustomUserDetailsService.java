@@ -1,8 +1,8 @@
 package com.translate.app.configuration;
 
-import com.translate.app.entity.Authority;
-import com.translate.app.entity.User;
-import com.translate.app.repository.UserRepository;
+import com.translate.app.dao.entity.Authority;
+import com.translate.app.dao.entity.User;
+import com.translate.app.dao.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

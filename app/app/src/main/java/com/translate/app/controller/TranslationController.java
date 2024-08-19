@@ -1,13 +1,17 @@
 package com.translate.app.controller;
 
-import com.translate.app.dto.request.TranslationAddRequest;
-import com.translate.app.dto.request.TranslationUpdateRequest;
-import com.translate.app.entity.Translation;
+import com.translate.app.dao.entity.User;
+import com.translate.app.model.dto.request.TranslationAddRequest;
+import com.translate.app.model.dto.request.TranslationUpdateRequest;
+import com.translate.app.dao.entity.Translation;
+import com.translate.app.model.exception.TranslationNotFoundException;
 import com.translate.app.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/translate")
@@ -66,6 +70,59 @@ public class TranslationController {
         }
     }
 
+    @PostMapping("/{id}/like")
+    public ResponseEntity<String> likeTranslation(@PathVariable Integer id) {
+        try {
+            translationService.likeTranslation(id);
+            return ResponseEntity.ok("Translation liked successfully.");
+        } catch (TranslationNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/dislike")
+    public ResponseEntity<String> dislikeTranslation(@PathVariable Integer id) {
+        try {
+            translationService.dislikeTranslation(id);
+            return ResponseEntity.ok("Translation unliked successfully.");
+        } catch (TranslationNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> findTranslationById(@PathVariable Integer id) {
+        try {
+            translationService.findTranslationById(id);
+            return ResponseEntity.ok("Translation viewed successfully.");
+        } catch (TranslationNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/addToFavorites")
+    public ResponseEntity<String> addToFavorites(@PathVariable Integer id) {
+        try {
+            translationService.addToFavorites(id);
+            return ResponseEntity.ok("Translation added to favorites successfully.");
+        } catch (TranslationNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/favorites")
+    public Set<Translation> getFavoriteTranslations() {
+        User user = translationService.getCurrentUser();
+        return translationService.getFavoriteTranslations(user);
+    }
 
     // Additional methods
 

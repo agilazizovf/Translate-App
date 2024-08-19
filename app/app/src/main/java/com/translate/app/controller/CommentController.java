@@ -1,12 +1,15 @@
 package com.translate.app.controller;
 
-import com.translate.app.dto.request.CommentAddRequest;
-import com.translate.app.dto.request.CommentUpdateRequest;
-import com.translate.app.dto.response.CommentAddResponse;
-import com.translate.app.dto.response.CommentUpdateResponse;
-import com.translate.app.entity.Comment;
+import com.translate.app.model.dto.request.CommentAddRequest;
+import com.translate.app.model.dto.request.CommentUpdateRequest;
+import com.translate.app.model.dto.response.CommentAddResponse;
+import com.translate.app.model.dto.response.CommentUpdateResponse;
+import com.translate.app.dao.entity.Comment;
+import com.translate.app.model.exception.CommentNotFoundException;
+import com.translate.app.model.exception.TranslationNotFoundException;
 import com.translate.app.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +44,29 @@ public class CommentController {
     public ResponseEntity<List<Comment>> getCommentsForTranslation(@PathVariable Integer translationId) {
         List<Comment> comments = commentService.getCommentsForTranslation(translationId);
         return ResponseEntity.ok(comments);
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<String> like(@PathVariable Integer id) {
+        try {
+            commentService.like(id);
+            return ResponseEntity.ok("Comment liked successfully.");
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/dislike")
+    public ResponseEntity<String> dislike(@PathVariable Integer id) {
+        try {
+            commentService.dislike(id);
+            return ResponseEntity.ok("Comment disliked successfully.");
+        } catch (CommentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 }

@@ -1,9 +1,9 @@
 package com.translate.app.controller;
 
 
-import com.translate.app.dto.request.ClientAddRequest;
-import com.translate.app.dto.request.LoginRequest;
-import com.translate.app.dto.response.ClientAddResponse;
+import com.translate.app.model.dto.request.ClientAddRequest;
+import com.translate.app.model.dto.request.LoginRequest;
+import com.translate.app.model.dto.response.ClientAddResponse;
 import com.translate.app.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

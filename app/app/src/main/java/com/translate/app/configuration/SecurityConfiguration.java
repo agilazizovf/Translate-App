@@ -1,5 +1,7 @@
 package com.translate.app.configuration;
 
+import com.translate.app.dao.repository.UserRepository;
+import com.translate.app.utility.JwtAuthorizationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -18,12 +23,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 public class SecurityConfiguration {
 
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final UserRepository userRepository;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> (UserDetails) userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+
     @Bean
     public static BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-    private final CustomUserDetailsService userDetailsService;
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder)
@@ -47,8 +61,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(permitAllUrls).permitAll()
-                                .requestMatchers(adminUrls).hasAnyAuthority("ROLE_ADMIN")
-                                .requestMatchers(userUrls).hasAnyAuthority("ROLE_USER")
+                                .requestMatchers(adminUrls).hasAnyAuthority("ADMIN")
+                                .requestMatchers(userUrls).hasAnyAuthority("USER")
                                 .requestMatchers(anyAuthUrls).authenticated()
 
 //                                .anyRequest().authenticated()
@@ -74,7 +88,11 @@ public class SecurityConfiguration {
             "/swagger-resources/**",
             "/configuration/ui",
             "/translate/**",
+            "/password/**",
             "/h2-console/**",
+            "/phrase-books/**",
+            "/categories/**",
+            "/phrases/**",
             "/comments/**",
             "/password/**",
             "/swagger-ui/**",
