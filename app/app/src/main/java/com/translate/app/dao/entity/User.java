@@ -1,6 +1,7 @@
 package com.translate.app.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.translate.app.model.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -47,6 +48,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
+
+    private Status status;
 
     public User(String username, String password) {
         this.username = username;

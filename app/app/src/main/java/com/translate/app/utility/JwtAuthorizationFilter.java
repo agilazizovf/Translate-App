@@ -1,6 +1,5 @@
 package com.translate.app.utility;
 
-import com.translate.app.utility.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

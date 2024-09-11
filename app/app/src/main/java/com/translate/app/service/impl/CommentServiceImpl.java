@@ -41,10 +41,10 @@ public class CommentServiceImpl implements CommentService {
         String username = (String) authentication.getPrincipal();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Translation translationRecord = translationRepository.findById(translationRecordId)
-                .orElseThrow(() -> new RuntimeException("TranslationRecord not found"));
+                .orElseThrow(() -> new TranslationNotFoundException("TranslationRecord not found"));
 
         Comment comment = new Comment(content, LocalDateTime.now(), LocalDateTime.now(), user, translationRecord);
         commentRepository.save(comment);
@@ -61,10 +61,10 @@ public class CommentServiceImpl implements CommentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) authentication.getPrincipal();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Comment comment = commentRepository.findById(request.getId())
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
 
         if (!comment.getUser().equals(user)) {
             throw new AuthenticationException("You do not have permission to update this comment");

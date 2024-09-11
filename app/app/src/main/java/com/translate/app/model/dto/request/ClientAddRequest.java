@@ -2,6 +2,7 @@ package com.translate.app.model.dto.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.translate.app.model.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -52,5 +53,6 @@ public class ClientAddRequest {
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
+
 
 }

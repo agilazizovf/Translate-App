@@ -10,6 +10,7 @@ import com.translate.app.dao.entity.Client;
 import com.translate.app.dao.entity.User;
 import com.translate.app.dao.repository.ClientRepository;
 import com.translate.app.dao.repository.UserRepository;
+import com.translate.app.model.enums.Status;
 import com.translate.app.model.exception.AlreadyExistsException;
 import com.translate.app.model.exception.UserNotFoundException;
 import com.translate.app.service.AuthService;
@@ -23,7 +24,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -92,16 +92,15 @@ public class AuthServiceImpl implements AuthService {
         Authority authority = new Authority("USER");
         Set<Authority> authoritySet = Set.of(authority);
         user.setAuthorities(authoritySet);
+        user.setStatus(Status.ONLINE);
         userRepository.save(user);
 
         log.info("Saved new client and user with username: {}", client.getUsername());
 
         // Prepare response
         ClientAddResponse response = new ClientAddResponse();
-        response.setName(clientAddRequest.getName());
-        response.setSurname(clientAddRequest.getSurname());
         response.setUsername(clientAddRequest.getUsername());
-        response.setAuthority("USER");
+        response.setStatus(Status.ONLINE);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
