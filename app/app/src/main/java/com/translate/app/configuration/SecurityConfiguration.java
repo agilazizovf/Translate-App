@@ -33,7 +33,6 @@ public class SecurityConfiguration {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-
     @Bean
     public static BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -46,7 +45,6 @@ public class SecurityConfiguration {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
-
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

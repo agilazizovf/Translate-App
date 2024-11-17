@@ -43,7 +43,7 @@ public class ClientAddRequest {
     @NotEmpty(message = "Email must not be empty")
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Email must be valid.Example: firstname-lastname@example.com  ")
     @Column(columnDefinition = "VARCHAR(70)")
-    @Size(min = 6, max = 70, message = "Email must be between 3 and 70 characters")
+    @Size(min = 6, max = 70, message = "Email must be between 6 and 70 characters")
     private String email;
 
     @NotEmpty(message = "Address must not be empty")

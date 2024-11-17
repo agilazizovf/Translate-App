@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class CommentUpdateRequest {
 
-    private Integer id;
-
     @NotNull(message = "TranslationRecord ID cannot be null")
     private Integer translationId;
 

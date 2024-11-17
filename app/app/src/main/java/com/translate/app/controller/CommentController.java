@@ -29,13 +29,13 @@ public class CommentController {
     }
 
     @PutMapping
-    public ResponseEntity<CommentUpdateResponse> updateComment(@RequestBody CommentUpdateRequest request) {
-        CommentUpdateResponse response = commentService.update(request);
+    public ResponseEntity<CommentUpdateResponse> updateComment(Long id, @RequestBody CommentUpdateRequest request) {
+        CommentUpdateResponse response = commentService.update(id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -47,7 +47,7 @@ public class CommentController {
     }
 
     @PostMapping("/{id}/like")
-    public ResponseEntity<String> like(@PathVariable Integer id) {
+    public ResponseEntity<String> like(@PathVariable Long id) {
         try {
             commentService.like(id);
             return ResponseEntity.ok("Comment liked successfully.");
@@ -59,7 +59,7 @@ public class CommentController {
     }
 
     @PostMapping("/{id}/dislike")
-    public ResponseEntity<String> dislike(@PathVariable Integer id) {
+    public ResponseEntity<String> dislike(@PathVariable Long id) {
         try {
             commentService.dislike(id);
             return ResponseEntity.ok("Comment disliked successfully.");
