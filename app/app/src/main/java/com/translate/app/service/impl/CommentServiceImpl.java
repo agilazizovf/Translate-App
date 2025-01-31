@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentUpdateResponse update(Long id, CommentUpdateRequest request) {
+    public CommentUpdateResponse update(Integer id, CommentUpdateRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) authentication.getPrincipal();
         User user = userRepository.findByUsername(username)
@@ -82,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) authentication.getPrincipal();
         User user = userRepository.findByUsername(username)
@@ -100,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void like(Long commentId) {
+    public void like(Integer commentId) {
         User currentUser = getCurrentUser();
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
@@ -119,7 +119,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void dislike(Long commentId) {
+    public void dislike(Integer commentId) {
         User currentUser = getCurrentUser();
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));

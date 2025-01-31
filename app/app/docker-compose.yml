@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+
+  translate-app:
+    image: agilazizovf/translate-app:latest
+    container_name: translate-app-container
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

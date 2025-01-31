@@ -18,7 +18,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotNull
     @Column(nullable = false)
@@ -52,10 +52,10 @@ public class Comment {
     private Set<Integer> dislikedByUsers    = new HashSet<>();
 
     @Column(name = "likes", nullable = false)
-    private Long likes;
+    private Integer likes;
 
     @Column(name = "dislikes", nullable = false)
-    private Long dislikes;
+    private Integer dislikes;
 
     public Comment(String content, LocalDateTime createdAt, LocalDateTime updatedAt, User user, Translation translation) {
         this.content = content;
